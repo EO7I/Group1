@@ -1,86 +1,87 @@
 pipeline {
-  agent any
+    agent any
 
-  environment {
-    awsecrRegistry = '730335456215.dkr.ecr.ap-northeast-2.amazonaws.com/wordpress-ecr'
-    awsecrRegistryCredential = 'credential-AWS-ECR'
-    githubCredential = 'credential-github'
-    gitEmail = '2071ly@gmail.com'
-    gitName = 'EO71'
-  }
-
-  stages {
-    stage('Checkout Application Git Branch') {
-      steps {
-        checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: githubCredential, url: 'https://github.com/EO7I/Group1.git']]])
-      }
-      post {
-        failure {
-          echo 'Repository clone failure'
-        }
-        success {
-          echo 'Repository clone success'
-        }
-      }
+    environment {
+        awsecrRegistry = '730335456215.dkr.ecr.ap-northeast-2.amazonaws.com/wordpress-ecr'
+        awsecrRegistryCredential = 'credential-AWS-ECR' // Jenkins에서 설정한 AWS 자격 증명 ID
+        githubCredential = 'credential-github'
+        gitEmail = '2071ly@gmail.com'
+        gitName = 'EO71'
     }
 
-    stage('Docker Image Build') {
-      steps {
-        sh "docker build . -t ${awsecrRegistry}:${currentBuild.number}"
-        sh "docker build . -t ${awsecrRegistry}:latest"
-      }
-      post {
-        failure {
-          echo 'Docker image build failure'
+    stages {
+        stage('Checkout Application Git Branch') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: githubCredential, url: 'https://github.com/EO7I/Group1.git']]])
+            }
+            post {
+                failure {
+                    echo 'Repository clone failure'
+                }
+                success {
+                    echo 'Repository clone success'
+                }
+            }
         }
-        success {
-          echo 'Docker image build success'
+
+        stage('Docker Image Build') {
+            steps {
+                sh "docker build . -t ${awsecrRegistry}:${currentBuild.number}"
+                sh "docker build . -t ${awsecrRegistry}:latest"
+            }
+            post {
+                failure {
+                    echo 'Docker image build failure'
+                }
+                success {
+                    echo 'Docker image build success'
+                }
+            }
         }
-      }
+
+        stage('Docker Image Push') {
+            steps {
+                script {
+                    // AWS ECR에 로그인
+                    sh 'aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 730335456215.dkr.ecr.ap-northeast-2.amazonaws.com'
+                }
+                withDockerRegistry([url: "https://${awsecrRegistry}", credentialsId: awsecrRegistryCredential]) {
+                    sh "docker push ${awsecrRegistry}:${currentBuild.number}"
+                    sh "docker push ${awsecrRegistry}:latest"
+                    sleep 10
+                }
+            }
+            post {
+                failure {
+                    echo 'Docker Image Push failure'
+                    sh "docker rmi ${awsecrRegistry}:${currentBuild.number}"
+                    sh "docker rmi ${awsecrRegistry}:latest"
+                }
+                success {
+                    echo 'Docker Image Push success'
+                    sh "docker rmi ${awsecrRegistry}:${currentBuild.number}"
+                    sh "docker rmi ${awsecrRegistry}:latest"
+                }
+            }
+        }
+
+        stage('Update Image Tag and Push to Git Repository') { 
+            steps {
+                sh "git config --global user.email ${gitEmail}"
+                sh "git config --global user.name ${gitName}"
+                sh "cd web && kustomize edit set image ${awsecrRegistry}:${currentBuild.number}"
+                sh "git add -A"
+                sh "git commit -m 'update the image tag'"
+                withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: githubCredential, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
+                    sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git"
+                }
+            }
+        }
     }
 
-    stage('Docker Image Push') {
-      steps {
-        script {
-          sh 'aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 730335456215.dkr.ecr.ap-northeast-2.amazonaws.com'
+    post {
+        always {
+            cleanWs()
         }
-        withDockerRegistry([url: "https://${awsecrRegistry}", credentialsId: awsecrRegistryCredential]) {
-          sh "docker push ${awsecrRegistry}:${currentBuild.number}"
-          sh "docker push ${awsecrRegistry}:latest"
-          sleep 10
-        }
-      }
-      post {
-        failure {
-          echo 'Docker Image Push failure'
-          sh "docker rmi ${awsecrRegistry}:${currentBuild.number}"
-          sh "docker rmi ${awsecrRegistry}:latest"
-        }
-        success {
-          echo 'Docker Image Push success'
-          sh "docker rmi ${awsecrRegistry}:${currentBuild.number}"
-          sh "docker rmi ${awsecrRegistry}:latest"
-        }
-      }
     }
-
-    stage('Update Image Tag and Push to Git Repository') { 
-      steps {
-        sh "git config --global user.email ${gitEmail}"
-        sh "git config --global user.name ${gitName}"
-        sh "cd web && kustomize edit set image ${awsecrRegistry}:${currentBuild.number}"
-        sh "git add -A"
-        sh "git commit -m 'update the image tag'"
-        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: githubCredential, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
-          sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git"
-        }
-      }
-    }
-  }
-
-  post {
-    always {
-      cleanWs()
-    }
-  }
 }
