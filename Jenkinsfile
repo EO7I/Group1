@@ -82,7 +82,7 @@ pipeline {
         // git 계정 로그인, 해당 레포지토리의 main 브랜치에서 클론
         git credentialsId: githubCredential,
             url: 'https://github.com/EO7I/Group1.git',
-            branch: 'web'
+            branch: 'main/web'
 
         // 이미지 태그 변경 후 메인 브랜치에 푸시
         sh "git config --global user.email ${gitEmail}"
@@ -91,7 +91,7 @@ pipeline {
         sh "git add -A"
         sh "git status"
         sh "git commit -m 'update the image tag'"
-        sh "git branch -M web"
+        sh "git branch -M main/web"
               }
     }
 
