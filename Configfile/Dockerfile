@@ -15,7 +15,7 @@ VOLUME ["/var/www/html"]
 
 # 필요한 패키지 설치
 #RUN yum update -y && \
-    yum install -y httpd mysql php php-mysqlnd php-fpm php-json tar gzip curl
+    #yum install -y httpd mysql php php-mysqlnd php-fpm php-json tar gzip curl
 
 # Apache와 PHP-FPM 설정 파일 수정
 #COPY httpd.conf /etc/httpd/conf/httpd.conf
@@ -23,6 +23,6 @@ VOLUME ["/var/www/html"]
 
 # WordPress 다운로드 및 설치
 #RUN curl -O https://wordpress.org/wordpress-5.8.tar.gz && \
-    tar -zxvf wordpress-5.8.tar.gz -C /var/www/html/ && \
-    chown -R apache:apache /var/www/html && \
-    chmod -R 755 /var/www/html
+    #tar -zxvf wordpress-5.8.tar.gz -C /var/www/html/ && \
+    #chown -R apache:apache /var/www/html && \
+    #chmod -R 755 /var/www/html
