@@ -13,9 +13,6 @@ pipeline {
     disableConcurrentBuilds() // 중복 빌드 방지
   }
 
-  triggers {
-    // 여기서는 수동 트리거로 설정
-  }
 
   stages {
 
