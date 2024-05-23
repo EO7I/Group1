@@ -12,9 +12,6 @@ pipeline {
     gitName = 'EO7I'
   }
   
-  options {
-    disableConcurrentBuilds() // 중복 빌드 방지
-  }
   
   stages {
 
