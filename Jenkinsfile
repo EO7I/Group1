@@ -81,7 +81,7 @@ pipeline {
       steps {
         // git 계정 로그인, 해당 레포지토리의 main 브랜치에서 클론
         git credentialsId: githubCredential,
-            url: 'https://github.com/EO7I/Group1.git',
+            url: 'https://github.com/EO7I/Group1/web.git',
             branch: 'main'
 
         // 이미지 태그 변경 후 메인 브랜치에 푸시
@@ -98,7 +98,7 @@ pipeline {
     stage('Push to Git Repository') {
       steps {
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: githubCredential, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
-             sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git"
+             sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1/web.git"
         }
       }
     }
