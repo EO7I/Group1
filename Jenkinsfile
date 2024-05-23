@@ -34,8 +34,8 @@ pipeline {
     stage('Docker Image Build') {
       steps {
         // 도커 이미지 빌드
-        sh "docker build . -t ${awsecrRegistry}:${currentBuild.number}"
-        sh "docker build . -t ${awsecrRegistry}:latest"
+        sh "docker build ./config -t ${awsecrRegistry}:${currentBuild.number}"
+        sh "docker build ./config -t ${awsecrRegistry}:latest"
       }
       // 성공, 실패 시 슬랙에 알람오도록 설정
       post {
