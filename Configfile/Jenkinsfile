@@ -9,7 +9,7 @@ pipeline {
     awsecrRegistryCredential = 'credential-AWS-ECR'
     githubCredential = 'credential-github'
     gitEmail = '2071ly@gmail.com'
-    gitName = 'EO71'
+    gitName = 'EO7I'
   }
 
   stages {
