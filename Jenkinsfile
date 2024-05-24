@@ -18,6 +18,7 @@ pipeline {
                 script {
                     // Initialize the repository
                     sh 'git init'
+                    sh 'git remote remove origin || true' // 기존 origin 제거 (존재하지 않아도 오류 무시)
                     sh 'git remote add origin https://github.com/EO7I/Group1.git'
                     
                     // Configure sparse checkout
