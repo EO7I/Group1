@@ -83,7 +83,7 @@ pipeline {
         // git 계정 로그인, 해당 레포지토리의 main 브랜치에서 클론
         git credentialsId: githubCredential,
             url: 'https://github.com/EO7I/Group1.git',
-            branch: 'main'
+            branch: 'update-web-folder'
 
         // 이미지 태그 변경 후 메인 브랜치에 푸시
         sh "git config --global user.email ${gitEmail}"
@@ -93,21 +93,13 @@ pipeline {
         sh "git status"
         sh "git commit -m 'update the image tag'"
         
-        // 브랜치 변경
-        sh "git branch -M update-web-folder"
               }
     }
 
     stage('Push to Git Repository') {
       steps {
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: githubCredential, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
-            sh """
-                # 원격 브랜치와 동기화
-                git pull --rebase https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git update-web-folder || true
-                
-                # 변경 사항 푸시
-                git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git update-web-folder
-            """
+             sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git update-web-folder"
         }
       }
     }
