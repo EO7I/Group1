@@ -1,4 +1,3 @@
-namePrefix: web-
 resources:
 - deployment.yaml
 - service.yaml
