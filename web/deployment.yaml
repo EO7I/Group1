@@ -30,6 +30,19 @@ spec:
               value: "admin"
             - name: WORDPRESS_DB_NAME
               value: "dbhouse2"
+            - name: WORDPRESS_REDIS_HOST 
+              value: "redis"
+            - name: WORDPRESS_REDIS_PORT 
+              value: "6379" 
+            - name: WP_REDIS_HOST 
+              valueFrom: 
+                env: WORDPRESS_REDIS_HOST 
+            - name: WP_REDIS_PORT 
+              valueFrom: 
+                env: WORDPRESS_REDIS_PORT 
+            - name: WPLANG value: "ko_KR
+
+              
           ports:
             - containerPort: 80
               name: wordpress
