@@ -100,7 +100,7 @@ pipeline {
         sh "git checkout -B update-web-folder origin/update-web-folder"
               }
     }
-          # 변경 사항 푸시
+
     stage('Push to Git Repository') {
       steps {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: githubCredential, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
