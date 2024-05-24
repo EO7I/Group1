@@ -92,14 +92,16 @@ pipeline {
         sh "git add web"
         sh "git status"
         sh "git commit -m 'update the image tag'"
-        sh "git branch -M main"
+        
+        // 새로운 브랜치 생성
+        sh "git checkout -b update-web-folder"
               }
     }
 
     stage('Push to Git Repository') {
       steps {
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: githubCredential, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
-             sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git"
+             sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git update-web-folder"
         }
       }
     }
