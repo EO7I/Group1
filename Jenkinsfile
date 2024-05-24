@@ -77,8 +77,10 @@ pipeline {
       steps {
         withCredentials([usernamePassword(credentialsId: githubCredential, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
           script {
-            // Ensure we are only pushing changes from the web folder
-            sh 'git subtree push --prefix=web https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git main'
+           sh """
+              git pull https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git main
+              git subtree push --prefix=web https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git main
+            """
           }
         }
       }
