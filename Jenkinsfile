@@ -13,10 +13,9 @@ pipeline {
   }
   
   
-  stages {
-
     // 깃허브 계정으로 레포지토리를 클론한다.
-    stage('Checkout Application Git Branch') {
+    stage('Checkout Application Git Branch') { when { branch 'main' // main 브랜치에서만 실행되도록 설정 }
+                                                     {
       steps {
         checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: githubCredential, url: 'https://github.com/EO7I/Group1.git']]])
       }
@@ -32,7 +31,8 @@ pipeline {
       }
     }
 
-    stage('Docker Image Build') {
+    stage('Docker Image Build') { when { branch 'main' // main 브랜치에서만 실행되도록 설정 }
+                                        {
       steps {
         // 도커 이미지 빌드
         sh "docker build ./config -t ${awsecrRegistry}:${currentBuild.number}"
@@ -51,7 +51,8 @@ pipeline {
       }
     }
 
-    stage('Docker Image Push') {
+    stage('Docker Image Push') { when { branch 'main' // main 브랜치에서만 실행되도록 설정 }
+                                       {
       steps {
         // 젠킨스에 등록한 계정으로 ECR 에 이미지 푸시
         withDockerRegistry([url: "https://${awsecrRegistry}", credentialsId: "ecr:ap-northeast-2:${awsecrRegistryCredential}"]) {
@@ -78,7 +79,8 @@ pipeline {
     }
 
     // updated docker image 태그를 git push
-    stage('Deploy') {
+    stage('Deploy') { when { branch 'main' // main 브랜치에서만 실행되도록 설정 }
+                            {
       steps {
         // git 계정 로그인, 해당 레포지토리의 main 브랜치에서 클론
         git credentialsId: githubCredential,
@@ -96,7 +98,10 @@ pipeline {
               }
     }
 
-    stage('Push to Git Repository') {
+    stage('Push to Git Repository') 
+    { 
+      when { branch 'main' // main 브랜치에서만 실행되도록 설정 } 
+                                            {
       steps {
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: githubCredential, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
              sh "cd web"
