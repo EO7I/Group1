@@ -101,7 +101,13 @@ pipeline {
     stage('Push to Git Repository') {
       steps {
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: githubCredential, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
-             sh "git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git update-web-folder"
+            sh """
+                # 원격 브랜치와 동기화
+                git pull --rebase https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git update-web-folder || true
+                
+                # 변경 사항 푸시
+                git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git update-web-folder
+            """
         }
       }
     }
