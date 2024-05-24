@@ -57,8 +57,8 @@ pipeline {
         withDockerRegistry([url: "https://${awsecrRegistry}", credentialsId: "ecr:ap-northeast-2:${awsecrRegistryCredential}"]) {
           sh "docker push ${awsecrRegistry}:${currentBuild.number}"
           sh "docker push ${awsecrRegistry}:latest"
-          // 10초 쉰 후에 다음 작업 이어나가도록 함
-          sleep 10
+          // 11초 쉰 후에 다음 작업 이어나가도록 함
+          sleep 11
         }
       }
       post {
