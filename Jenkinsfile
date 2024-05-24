@@ -94,7 +94,7 @@ pipeline {
         sh "git commit -m 'update the image tag'"
         
         // 브랜치 변경
-        sh "git barnch -M update-web-folder"
+        sh "git branch -M update-web-folder"
               }
     }
 
