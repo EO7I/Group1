@@ -93,8 +93,8 @@ pipeline {
         sh "git status"
         sh "git commit -m 'update the image tag'"
         
-        // 새로운 브랜치 생성
-        sh "git checkout -b update-web-folder"
+        // 브랜치 변경
+        sh "git barnch -M update-web-folder"
               }
     }
 
