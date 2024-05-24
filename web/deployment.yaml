@@ -39,10 +39,7 @@ spec:
                 env: WORDPRESS_REDIS_HOST 
             - name: WP_REDIS_PORT 
               valueFrom: 
-                env: WORDPRESS_REDIS_PORT 
-            - name: WPLANG value: "ko_KR
-
-              
+                env: WORDPRESS_REDIS_PORT    
           ports:
             - containerPort: 80
               name: wordpress
