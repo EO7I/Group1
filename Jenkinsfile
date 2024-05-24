@@ -106,10 +106,10 @@ pipeline {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: githubCredential, usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
                     sh """
                         # 원격 브랜치와 동기화
-                        git pull --rebase https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git update-web-folder || true
+                        git pull --rebase https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git
                         
                         # 변경 사항 푸시
-                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git update-web-folder
+                        git push https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/EO7I/Group1.git
                     """
         }
       }
