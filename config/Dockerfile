@@ -6,8 +6,6 @@ ENV WORDPRESS_DB_PASSWORD=Amazon1!
 ENV WORDPRESS_DB_USER=admin
 ENV WORDPRESS_DB_NAME=dbhouse
 
-RUN sudo chown -R 33:33 /var/www/html
-
 # 포트 개방
 EXPOSE 80
 
