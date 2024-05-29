@@ -18,26 +18,25 @@ spec:
         app: wordpress
         tier: frontend
     spec:
-     containers:
-        - image: 730335456215.dkr.ecr.ap-northeast-2.amazonaws.com/wordpress-ecr:latest
+      containers:
+      - image: 730335456215.dkr.ecr.ap-northeast-2.amazonaws.com/wordpress-ecr:latest
+        name: wordpress
+        env:
+        - name: WORDPRESS_DB_HOST
+          value: "db-hs1.cluster-cdy6a8acgxti.ap-northeast-2.rds.amazonaws.com"
+        - name: WORDPRESS_DB_PASSWORD
+          value: "Amazon1!"
+        - name: WORDPRESS_DB_USER
+          value: "admin"
+        - name: WORDPRESS_DB_NAME
+          value: "dbhouse2"
+        ports:
+        - containerPort: 80
           name: wordpress
-          env:
-            - name: WORDPRESS_DB_HOST
-              value: "db-hs1.cluster-cdy6a8acgxti.ap-northeast-2.rds.amazonaws.com"
-            - name: WORDPRESS_DB_PASSWORD
-              value: "Amazon1!"
-            - name: WORDPRESS_DB_USER
-              value: "admin"
-            - name: WORDPRESS_DB_NAME
-              value: "dbhouse2" 
-          ports:
-            - containerPort: 80
-              name: wordpress
-              volumeMounts:
-              - name: wordpress-uploads-storage
-                mountPath: /var/www/html/wp-content
-     volumes:
-     - name: wordpress-uploads-storage
-       persistentVolumeClaim:
-         claimName: wordpress-efs-pvc
-
+        volumeMounts:
+        - name: wordpress-uploads-storage
+          mountPath: /var/www/html/wp-content
+      volumes:
+      - name: wordpress-uploads-storage
+        persistentVolumeClaim:
+          claimName: wordpress-efs-pvc
