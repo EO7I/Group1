@@ -36,8 +36,8 @@ spec:
               volumeMounts:
               - name: wordpress-uploads-storage
                 mountPath: /var/www/html/wp-content
-      volumes:
-      - name: wordpress-uploads-storage
-        persistentVolumeClaim:
-          claimName: wordpress-efs-pvc
+    volumes:
+    - name: wordpress-uploads-storage
+      persistentVolumeClaim:
+        claimName: wordpress-efs-pvc
 
