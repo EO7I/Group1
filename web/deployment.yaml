@@ -18,8 +18,10 @@ spec:
         app: wordpress
         tier: frontend
     spec:
+      securityContext:
+        fsGroup: 33  # Access Point의 GID와 맞추기
       containers:
-      - image: wordpress:5.8-apache
+      - image: 730335456215.dkr.ecr.ap-northeast-2.amazonaws.com/wordpress-ecr:latest
         name: wordpress
         env:
         - name: WORDPRESS_DB_HOST
@@ -39,4 +41,4 @@ spec:
       volumes:
       - name: wordpress-content-storage
         persistentVolumeClaim:
-          claimName: wordpress-efs-pvc
+          claimName: wordpress-efs-pvc-ap
