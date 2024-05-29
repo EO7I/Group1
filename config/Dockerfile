@@ -10,7 +10,7 @@ ENV WORDPRESS_DB_NAME=dbhouse
 EXPOSE 80
 
 # 볼륨 마운트 정의
-VOLUME ["/var/www/html"]
+VOLUME ["/var/www/html/wp-content"]
 
 
 # 필요한 패키지 설치
