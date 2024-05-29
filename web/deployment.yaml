@@ -18,8 +18,6 @@ spec:
         app: wordpress
         tier: frontend
     spec:
-      securityContext:
-        fsGroup: 33
       containers:
       - image: wordpress:5.8-apache
         name: wordpress
