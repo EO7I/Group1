@@ -19,8 +19,10 @@ spec:
         tier: frontend
     spec:
       containers:
+      # 이미지 ECR의 최신 버전 사용
       - image: 730335456215.dkr.ecr.ap-northeast-2.amazonaws.com/wordpress-ecr:latest
         name: wordpress
+        # ENV로 RDS 변수 설정
         env:
         - name: WORDPRESS_DB_HOST
           value: "db-hs1.cluster-cdy6a8acgxti.ap-northeast-2.rds.amazonaws.com"
@@ -33,6 +35,7 @@ spec:
         ports:
         - containerPort: 80
           name: wordpress
+        # mountPath로 wp-content 정의 테마와 플러그인, 미디어 등 efs에 저장  
         volumeMounts:
         - name: wordpress-content-storage
           mountPath: /var/www/html/wp-content
