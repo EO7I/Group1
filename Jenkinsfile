@@ -1,9 +1,9 @@
 pipeline {
   agent any
 
-  // 해당 스크립트 내에서 사용할 로컬 변수들 설정-
+  // 로컬 변수 설정
   // 레포지토리가 없으면 생성됨
-  // Credential들에는 젠킨스 크레덴셜에서 설정한 ID를 사용
+  // Credential에는 젠킨스에서 설정한 ID를 사용
   environment {
     awsecrRegistry = '730335456215.dkr.ecr.ap-northeast-2.amazonaws.com/wordpress-ecr'
     awsecrRegistryCredential = 'credential-AWS-ECR'
@@ -15,13 +15,12 @@ pipeline {
   
   stages {
 
-    // 깃허브 계정으로 레포지토리를 클론한다.
+    // 깃허브 계정 레포지토리 클론
     stage('Checkout Application Git Branch') {
       steps {
         checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: githubCredential, url: 'https://github.com/EO7I/Group1.git']]])
       }
-      // steps 가 끝날 경우 실행한다.
-      // steps 가 실패할 경우에는 failure 를 실행하고 성공할 경우에는 success 를 실행한다.
+      // 실패시 failure 성공시 success 실행
       post {
         failure {
           echo 'Repository clone failure'
